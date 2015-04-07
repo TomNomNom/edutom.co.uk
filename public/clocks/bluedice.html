@@ -1,0 +1,144 @@
+<!doctype html> 
+<html> 
+	<head> 
+		<title>Let's Learn Javascript!</title> 
+	</head> 
+	<body> 
+		<canvas id="clock" width="700" height="700"></canvas> 
+		<script>
+			// Page layout and code based on code
+			// by TomNomNom.
+
+			// Done by bluedice at 1:18 AM in morning.
+
+			// Thanks Reddit, I had no idea that a
+			// canvas even existed before I saw that post.
+
+			window.onload = function(){
+
+					// Declare get function
+					var get = function(id, context){
+
+							context = context || document;
+							return context.getElementById(id);  
+					};
+
+					// Get the frame I guess
+					var clock = get('clock');
+					var c = clock.getContext('2d');
+
+					// Set up some constants
+					var hThickness = 10;
+					var mThickness = 5;
+					var sThickness = 2;
+					var lThickness = 4;
+					var hLength = 200;
+					var mLength = 250;
+					var sLength = 300;
+
+					// Make the function for updating
+					var update = function(){
+
+							// Get the date variable and extract data
+							var date = new Date();
+							var curMilis = date.getMilliseconds();
+							var curSecs = date.getSeconds();
+							var curMins = date.getMinutes();
+							var curHr = date.getHours() % 12;
+
+							// Work out the angles
+							var hAngle = (2*Math.PI) * (curHr*3600*1000 + curMins*60*1000 + curSecs*1000 + curMilis) / (3600*1000*12);
+							var mAngle = (2*Math.PI) * (curMins*60*1000 + curSecs*1000 + curMilis) / (60*1000*60);
+							var sAngle = (2*Math.PI) * (curSecs*1000 + curMilis) / (60*1000);
+
+							// Work out the positions
+							var hX = 350 + hLength*Math.sin(hAngle);
+							var hY = 350 - hLength*Math.cos(hAngle);
+							var mX = 350 + mLength*Math.sin(mAngle);
+							var mY = 350 - mLength*Math.cos(mAngle);
+							var sX = 350 + sLength*Math.sin(sAngle);
+							var sY = 350 - sLength*Math.cos(sAngle);
+
+							// Draw the border
+							c.fillStyle = 'rgb(255, 255, 255)';
+							c.fillRect(0,0,700,700);
+							c.lineWidth = 8;
+							c.lineCap = 'round';
+							c.stroke();
+
+							c.beginPath();
+							c.strokeStyle = 'rgb(0,0,0)';
+							c.arc(350, 350, 340, 0, 2*Math.PI, false);
+							c.stroke();
+
+							// Draw the notches
+							for (var i = 0; i < 12; i++)
+							{
+									c.beginPath();
+									c.lineWidth = 8;
+									c.strokeStyle = 'rgb(0,0,0)';
+									c.moveTo( 350+340*Math.cos(Math.PI*2*i/12) , 350+340*Math.sin(Math.PI*2*i/12) );
+									c.lineTo( 350+330*Math.cos(Math.PI*2*i/12) , 350+330*Math.sin(Math.PI*2*i/12) );
+									c.stroke();
+							}
+
+							// Draw the 3 circles
+							c.lineWidth = sThickness;
+							c.beginPath();
+							c.strokeStyle = 'rgb(255,230,230)';
+							c.arc(350, 350, sLength, 0, 2*Math.PI, false);
+							c.stroke();
+
+							c.lineWidth = mThickness;
+							c.beginPath();
+							c.strokeStyle = 'rgb(230,230,230)';
+							c.arc(350, 350, mLength, 0, 2*Math.PI, false);
+							c.stroke();
+
+							c.lineWidth = hThickness;
+							c.beginPath();
+							c.strokeStyle = 'rgb(230,230,230)';
+							c.arc(350, 350, hLength, 0, 2*Math.PI, false);
+							c.stroke();
+
+							// Draw the triangle
+							c.beginPath();
+							c.lineWidth = lThickness;
+							c.strokeStyle = 'rgb(0,0,0)';
+							c.moveTo(hX,hY);
+							c.lineTo(mX,mY);
+							c.stroke();
+
+							c.beginPath();
+							c.lineWidth = lThickness;
+							c.strokeStyle = 'rgb(0,0,0)';
+							c.moveTo(hX,hY);
+							c.lineTo(sX,sY);
+							c.stroke();
+
+							c.beginPath();
+							c.lineWidth = lThickness;
+							c.strokeStyle = 'rgb(0,0,0)';
+							c.moveTo(sX,sY);
+							c.lineTo(mX,mY);
+							c.stroke();
+
+							// Unless this is here it glitches up!?
+							c.beginPath();
+							c.lineWidth = lThickness;
+							c.strokeStyle = 'rgb(255,255,255)';
+							c.moveTo(0,0);
+							c.lineTo(0,0);
+							c.stroke();
+
+
+					};
+
+					// Set it to call the function over and over
+					setInterval(update, 10);
+
+			};
+
+		</script> 
+	</body>
+</html>

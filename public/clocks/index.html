@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Clocky</title>
+		<style>
+			html, body { background-color: #1C1C1C; padding: 0px; margin: 0px; }
+			div { height: 80px; }
+			div#secondsBar { background-color: #EEEEEE; }
+			div#minutesBar { background-color: #EEEEEE; }
+			div#hoursBar { background-color: #EEEEEE; }
+			div#dayBar { background-color: #EEEEEE; }
+			div#monthBar { background-color: #EEEEEE; }
+			div.bar-60 { width: 600px; border-right: 3px solid #666666; background-color: #333333; }
+			div.bar-24 { width: 240px; border-right: 3px solid #666666; background-color: #333333; }
+			div.bar-31 { width: 310px; border-right: 3px solid #666666; background-color: #333333; }
+			div.bar-12 { width: 120px; border-right: 3px solid #666666; background-color: #333333; }
+		</style>
+	</head>
+	<body>
+		
+		<div class="bar-60"><div id="secondsBar">&nbsp;</div></div>
+		<div class="bar-60"><div id="minutesBar">&nbsp;</div></div>
+		<div class="bar-24"><div id="hoursBar">&nbsp;</div></div>
+		<div class="bar-31"><div id="dayBar">&nbsp;</div></div>
+		<div class="bar-12"><div id="monthBar">&nbsp;</div></div>
+
+		<script>
+			window.onload = function(){
+				var get = function(id, context){
+					context = context || document;
+					return context.getElementById(id);
+				};
+
+				var secondsBar = get('secondsBar');
+				var minutesBar = get('minutesBar');
+				var hoursBar = get('hoursBar');
+				var dayBar = get('dayBar');
+				var monthBar = get('monthBar');
+				var setBars = function(){
+					var date = new Date();
+
+					var seconds = (date.getSeconds()*10) + (date.getMilliseconds() / 100);
+					secondsBar.style.width = seconds + 'px';
+
+					var minutes = (date.getMinutes()*10) + (((100/60)*date.getSeconds()) / 10);
+					minutesBar.style.width = minutes + 'px';
+
+					var hours = (date.getHours()*10) + (((100/60)*date.getMinutes()) / 10);
+					hoursBar.style.width = hours + 'px';
+
+					dayBar.style.width = (date.getDate()*10) + 'px';
+					monthBar.style.width = (date.getMonth()*10) + 'px';
+				};
+				setInterval(setBars, 100);
+			};
+		</script>
+	</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+	<head>
+		<title>ClockyLing</title>
+		<style>
+			html, body { 
+				background-color: #1C1C1C; 
+				height: 100%;
+				width: 100%;
+				padding: 0px;
+				margin: 0px;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="clock" width="700" height="700"></canvas>
+		<script>
+			window.onload = function(){
+				var get = function(id, context){
+					context = context || document;
+					return context.getElementById(id);
+				};
+				var clock = get('clock');	
+				var c = clock.getContext('2d');
+
+
+				var minuteColour = 'rgb(200,200,200)';
+				var hourColour = 'rgb(150,150,150)';
+				var secondColour = 'rgb(100,100,100)';
+
+				var minuteLength = 230;
+				var hourLength = 65;
+				var secondLength = 35;
+
+				var update = function(){
+					
+					var date = new Date();
+					var cMilliseconds = date.getMilliseconds();
+					var cSeconds = date.getSeconds();
+					var cMinutes = date.getMinutes();
+					var cHours = date.getHours();
+						if (cHours > 12) cHours = cHours - 12;
+					var fullRotation = 2 * Math.PI;
+
+					c.fillStyle = 'rgb(28, 28, 28)';
+					c.fillRect(0,0,700,700);
+					c.lineWidth = 8;
+					c.lineCap = 'round';
+
+					c.save();
+					c.beginPath();
+					c.strokeStyle = 'rgb(50,50,50)';
+					c.arc(350, 350, 340, 0, fullRotation, false);
+					c.stroke();
+					c.restore();
+
+					var minuteRotation = ((fullRotation/60)*(cMinutes+((100/60)*cSeconds/100)));
+					var hourRotation = (fullRotation/12)*(cHours+(100/60*cMinutes/100)) - minuteRotation;
+					var secondRotation = ((fullRotation/60)*(cSeconds+(cMilliseconds/1000))) - minuteRotation - hourRotation;
+
+					c.save();
+					c.translate(350, 350);
+					c.beginPath();
+					c.moveTo(0,0);
+					c.rotate(minuteRotation);
+					c.strokeStyle = minuteColour;
+					c.lineWidth = 9;
+					c.lineTo(0, -minuteLength);
+					c.stroke();
+					c.beginPath();
+					c.fillStyle = 'rgb(6,6,6)';
+					c.arc(0, 0, 7, 0, fullRotation, false);
+					c.fill();
+						c.save();
+						c.translate(0,-minuteLength);
+						c.beginPath();
+						c.moveTo(0,0);
+						c.rotate(hourRotation);
+						c.strokeStyle = hourColour;
+						c.lineWidth = 12;
+						c.lineTo(0,-hourLength);
+						c.stroke();
+						c.beginPath();
+						c.fillStyle = 'rgb(6,6,6)';
+						c.arc(0, 0, 10, 0, fullRotation, false);
+						c.fill();
+							c.save();
+							c.translate(0, -hourLength);
+							c.beginPath();
+							c.moveTo(0,0);
+							c.rotate(secondRotation);
+							c.strokeStyle = secondColour;
+							c.lineWidth = 3;
+							c.lineTo(0, -secondLength);
+							c.stroke();
+							c.beginPath();
+							c.fillStyle = 'rgb(6,6,6)';
+							c.arc(0, 0, 5, 0, fullRotation, false);
+							c.fill();
+
+							c.restore();
+						c.restore();
+					c.restore();
+				};
+				setInterval(update, 100);
+			};
+		</script>
+	</body>
+</html>
